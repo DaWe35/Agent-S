@@ -162,3 +162,8 @@ cython_debug/
 #.idea/
 logs/
 .DS_Store
+bin/
+kb_s2/
+share/man/man1/ttx.1
+pyvenv.cfg
+lib64
