@@ -334,7 +334,12 @@ class OSWorldACI(ACI):
         else:
             grounding_width = 1000
             grounding_height = 1000
-
+            
+        print("GROUNDING WIDTH:", grounding_width)
+        print("GROUNDING HEIGHT:", grounding_height)
+        print("WIDTH:", self.width)
+        print("HEIGHT:", self.height)
+        print("COORDINATES:", coordinates)
         return [
             round(coordinates[0] * self.width / grounding_width),
             round(coordinates[1] * self.height / grounding_height),
