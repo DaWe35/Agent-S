@@ -202,6 +202,7 @@ class OSWorldACI(ACI):
             text_content=prompt, image_content=obs["screenshot"], put_text_last=True
         )
 
+        print("GROUNDING:", prompt)
         # Generate and parse coordinates
         response = call_llm_safe(self.grounding_model)
         print("RAW GROUNDING MODEL RESPONSE:", response)
@@ -387,7 +388,7 @@ class OSWorldACI(ACI):
         # TODO: specified duration?
         for k in hold_keys:
             command += f"pyautogui.keyDown({repr(k)}); "
-        command += f"""import pyautogui; pyautogui.click({x}, {y}, clicks={num_clicks}, button={repr(button_type)}); """
+        command += f"""pyautogui.moveTo({x}, {y}, duration=1); pyautogui.click({x}, {y}, clicks={num_clicks}, button={repr(button_type)}); """
         for k in hold_keys:
             command += f"pyautogui.keyUp({repr(k)}); "
         # Return pyautoguicode to click on the element
@@ -437,7 +438,7 @@ class OSWorldACI(ACI):
             x, y = self.resize_coordinates(self.coords1)
 
             command = "import pyautogui; "
-            command += f"pyautogui.click({x}, {y}); "
+            command += f"pyautogui.moveTo({x}, {y}, duration=1); pyautogui.click({x}, {y}); "
 
             if overwrite:
                 command += (
@@ -460,7 +461,7 @@ class OSWorldACI(ACI):
             command += f"pyautogui.write({repr(text)}); "
 
             if enter:
-                command += "pyautogui.press('enter'); "
+                command += "time.sleep(1.0); pyautogui.press('enter'); "
 
         return command
 
@@ -488,7 +489,7 @@ class OSWorldACI(ACI):
 
         command = "import pyautogui; "
 
-        command += f"pyautogui.moveTo({x1}, {y1}); "
+        command += f"pyautogui.moveTo({x1}, {y1}, duration=1); "
         # TODO: specified duration?
         for k in hold_keys:
             command += f"pyautogui.keyDown({repr(k)}); "
@@ -512,7 +513,7 @@ class OSWorldACI(ACI):
         x2, y2 = self.coords2
 
         command = "import pyautogui; "
-        command += f"pyautogui.moveTo({x1}, {y1}); "
+        command += f"pyautogui.moveTo({x1}, {y1}, duration=1); "
         command += f"pyautogui.dragTo({x2}, {y2}, duration=1.); pyautogui.mouseUp(); "
 
         # Return pyautoguicode to drag and drop the elements
@@ -545,9 +546,9 @@ class OSWorldACI(ACI):
         x, y = self.resize_coordinates(self.coords1)
 
         if shift:
-            return f"import pyautogui; import time; pyautogui.moveTo({x}, {y}); time.sleep(0.5); pyautogui.hscroll({clicks})"
+            return f"import pyautogui; import time; pyautogui.moveTo({x}, {y}, duration=1); time.sleep(0.5); pyautogui.hscroll({clicks})"
         else:
-            return f"import pyautogui; import time; pyautogui.moveTo({x}, {y}); time.sleep(0.5); pyautogui.vscroll({clicks})"
+            return f"import pyautogui; import time; pyautogui.moveTo({x}, {y}, duration=1); time.sleep(0.5); pyautogui.vscroll({clicks})"
 
     @agent_action
     def hotkey(self, keys: List):
